@@ -22,7 +22,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -33,10 +33,10 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name="Age")
+    @Column(name = "Age")
     private Long Age;
 
-    @Column(name="Email")
+    @Column(name = "Email")
     private String Email;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -102,7 +102,7 @@ public class User implements UserDetails {
     }
 
     public String userRole() {
-        String s=new String(roles.toString())
+        String s = roles.toString()
                 .replace("[", "")
                 .replace("]", "");
 

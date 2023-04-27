@@ -4,8 +4,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.services.RoleService;
-import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.services.RoleServiceImpl;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -15,10 +15,10 @@ import java.util.Set;
 @Component
 public class Creat {
 
-    private final RoleService roleRepository;
-    private final UserService userRepository;
+    private final RoleServiceImpl roleRepository;
+    private final UserServiceImpl userRepository;
 
-    Creat(UserService userRepository, RoleService roleRepository) {
+    Creat(UserServiceImpl userRepository, RoleServiceImpl roleRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
 

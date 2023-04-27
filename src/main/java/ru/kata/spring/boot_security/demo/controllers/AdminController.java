@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.kata.spring.boot_security.demo.entities.User;
-import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
 
 import java.security.Principal;
 
@@ -19,66 +19,57 @@ import java.security.Principal;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
+    public AdminController(UserServiceImpl userServiceImpl, PasswordEncoder passwordEncoder) {
+        this.userServiceImpl = userServiceImpl;
         this.passwordEncoder = passwordEncoder;
     }
 
 
-
     @GetMapping("/users")
-    public String getAllUsers(Model model,Principal principal) {
-
-        User user=userService.findByUserName(principal.getName());
-        model.addAttribute("user",userService.findUserById(user.getId()));
-        model.addAttribute("AllUsers", userService.getAllUsers());
-        model.addAttribute("role",user.getRoles());
+    public String getAllUsers(Model model, Principal principal) {
+        User user = userServiceImpl.findByUserName(principal.getName());
+        model.addAttribute("user", userServiceImpl.findUserById(user.getId()));
+        model.addAttribute("AllUsers", userServiceImpl.getAllUsers());
+        model.addAttribute("role", user.getRoles());
         model.addAttribute("roles");
-
         return "/infoAboutUsers";
     }
 
     @PostMapping("/users/addUser")
     public String addUser(@ModelAttribute("user") User user) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.saveUser(user);
-
+        userServiceImpl.saveUser(user);
         return "redirect:/admin/users";
     }
-    @GetMapping(value="/new")
-    public String addNewUser(Model model,Principal principal){
 
-        User user=userService.findByUserName(principal.getName());
-        model.addAttribute("user",userService.findUserById(user.getId()));
-        model.addAttribute("role",user.getRoles());
-
+    @GetMapping(value = "/new")
+    public String addNewUser(Model model, Principal principal) {
+        User user = userServiceImpl.findByUserName(principal.getName());
+        model.addAttribute("user", userServiceImpl.findUserById(user.getId()));
+        model.addAttribute("role", user.getRoles());
         return "/addNewUser";
     }
 
-    @GetMapping ("/users/update/{id}")
+    @GetMapping("/users/update/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.update(user.getId(), user);
+        userServiceImpl.update(user.getId(), user);
         return "redirect:/admin/users";
     }
 
 
     @GetMapping("/delete/{id}")
     public String delete(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-
-        userService.delete(user.getId(), user);
+        userServiceImpl.delete(user.getId(), user);
         return "redirect:/admin/users";
     }
 
     @GetMapping("/getOne")
     @ResponseBody
     public User getOne(Long id) {
-
-        return userService.findUserById(id);
+        return userServiceImpl.findUserById(id);
     }
 }
