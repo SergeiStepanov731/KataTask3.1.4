@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.services.UserServiceImpl;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
 import java.security.Principal;
 
@@ -14,16 +15,16 @@ import java.security.Principal;
 @RequestMapping("/user")
 public class MyController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    MyController(UserServiceImpl userServiceImpl){
-        this.userServiceImpl = userServiceImpl;
+    MyController(UserServiceImpl userService){
+        this.userService = userService;
     }
 
     @GetMapping()
     public String showUserInformation(Principal principal, Model model){
-        User user= userServiceImpl.findByUserName(principal.getName());
-        model.addAttribute("user", userServiceImpl.findUserById(user.getId()));
+        User user= userService.findByUserName(principal.getName());
+        model.addAttribute("user", userService.findUserById(user.getId()));
         return "/user";
     }
 }
